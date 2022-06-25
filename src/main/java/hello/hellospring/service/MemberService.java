@@ -5,13 +5,14 @@ import hello.hellospring.repository.MemoryMemberRepository;
 import hello.hellospring.domain.*;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 // Service 클래스는 비즈니스에 가까운 용어를 사용해야 한다.
 // ctrl + shift + T : Test 생성
 
-@Service
+@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;

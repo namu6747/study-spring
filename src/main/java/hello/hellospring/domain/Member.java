@@ -1,8 +1,16 @@
 package hello.hellospring.domain;
 
+import javax.persistence.*;
+
+@Entity
 public class Member {
 
+
+    // db에 자동으로 값을 너헝주는 걸 Identity라고 한다.
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    // @Column(name = "username")
     private String name;
 
 
