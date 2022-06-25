@@ -1,0 +1,77 @@
+과거 메이븐 요즘 그레이들
+
+라이브러리 추가
+웹 -> spring web
+템플릿 엔진 -> thymeleaf
+
+main, test가 나뉘어져있다.
+
+요즘 개발 트렌드에서 test 굉장히 중요하다
+
+스프링 부트가 등장하고 스프링 설정이 굉장히 쉬워짐
+
+인텔리제이 jdk 설정
+https://blog.naver.com/PostView.naver?
+blogId=tofhadl529&logNo=222374497101&
+from=search&redirect=Log&widgetTypeCall=true&directAccess=false
+
+인텔리제이는 톰캣 라이브러리를 가지고 있다.(embeded)
+예전 처럼 톰캣 서버를 깔고 그러지 않아도 된다.
+
+현업에선 syso가 아닌 log로 출력해야된다.
+starter-logging에서 logback을 많이쓴다. vs slf4j
+test는 junit으로, mockito와 assertj는 test 도와주는 라이브러리
+
+
+웹앱에서 첫번째 진입점이 컨트롤러다
+
+C:\Users\82105\Desktop\workspace\inflearn\hello-spring
+git bash 켜서 ./gradlew build 입력
+build/libs/hello-spring-0.0.1-SNAPSHOT.jar 생성
+서버 배포할때는 jar 파일만 복사해가지고 서버에 넣어주고
+실행시키면 됨
+
+과거에는 톰캣을 서버에 설치하고 war 만들고 했어야함
+
+웹의 개발 방식.
+1. 정적 컨텐츠 : 파일을 그대로 웹브라우저에
+2. MVC와 템플릿 엔진 : 과거의 JSP, PHP 이런것들이 소위 말하는 템플릿 엔진
+html을 그냥 주는 게 아니라 서버에서 프로그래밍해서 html을 동적으로
+바꿔서 내리는거
+3. API : 과거엔 xml도 썼는데 json 데이터 구조 포맷으로 클라이언트로 전달
+
+view는 화면을 그리는 데 모든 역량을 집중
+컨트롤러 모델은 비즈니스로직
+요즘 MVC는 기본이다
+
+ResponseBody 사용 원리
+R.B가 없다면 스프링 컨테이너에서 얘를 viewResolver를 통해
+템플릿을 찾아가도록 하지만
+있다면 HTTP로 바로 넘겨야겠다고 결정함
+리졸버대신 HttpMessageConverter가 동작
+JsonConverter vs StringConverter (다양한게있음)
+그런데 문자가 아니라 객체일떄
+default가 객체를 JSON 형태로 만들어서 응답하겠다
+
+★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+
+멤버 컨트롤러가,
+멤버 서비스를 통해서 회원가입 하고,
+멤버 서비스를 통해서 데이터를 조회할수 있고,
+이러한 관계를 컨트롤러가 멤버 서비스를 의존한다고 말한다.
+
+스프링에선 컨테이너에 사용할 빈을 등록한다.
+
+@Controller
+@Service
+@Repository
+되게 정형화 된 패턴이다.
+그래서 스프링에서 다 등록되어있는 어노테이션임.
+
+
+
+
+
+
+
+

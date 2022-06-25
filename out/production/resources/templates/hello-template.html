@@ -1,0 +1,13 @@
+
+<!-- 타임리프는 html을 바꿔주는 애
+    파일 우클릭 후 absolute path를 눌러
+    껍데기를 바로 볼 수 있음
+    템플릿 엔진을 쓰면 헬로 엠티가
+    태그에 있는 값으로 바뀜
+    헬로 엠티는 마크업과정에서 확인용
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<p th:text="'hello ' + ${name}">hello! empty</p>
+</body>
+</html>
