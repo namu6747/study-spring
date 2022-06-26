@@ -1,0 +1,336 @@
+과거 메이븐 요즘 그레이들
+
+라이브러리 추가
+웹 -> spring web
+템플릿 엔진 -> thymeleaf
+
+main, test가 나뉘어져있다.
+
+요즘 개발 트렌드에서 test 굉장히 중요하다
+
+스프링 부트가 등장하고 스프링 설정이 굉장히 쉬워짐
+
+인텔리제이 jdk 설정
+https://blog.naver.com/PostView.naver?
+blogId=tofhadl529&logNo=222374497101&
+from=search&redirect=Log&widgetTypeCall=true&directAccess=false
+
+인텔리제이는 톰캣 라이브러리를 가지고 있다.(embeded)
+예전 처럼 톰캣 서버를 깔고 그러지 않아도 된다.
+
+현업에선 syso가 아닌 log로 출력해야된다.
+starter-logging에서 logback을 많이쓴다. vs slf4j
+test는 junit으로, mockito와 assertj는 test 도와주는 라이브러리
+
+
+웹앱에서 첫번째 진입점이 컨트롤러다
+
+C:\Users\82105\Desktop\workspace\inflearn\hello-spring
+git bash 켜서 ./gradlew build 입력
+build/libs/hello-spring-0.0.1-SNAPSHOT.jar 생성
+서버 배포할때는 jar 파일만 복사해가지고 서버에 넣어주고
+실행시키면 됨
+
+과거에는 톰캣을 서버에 설치하고 war 만들고 했어야함
+
+웹의 개발 방식.
+1. 정적 컨텐츠 : 파일을 그대로 웹브라우저에
+2. MVC와 템플릿 엔진 : 과거의 JSP, PHP 이런것들이 소위 말하는 템플릿 엔진
+html을 그냥 주는 게 아니라 서버에서 프로그래밍해서 html을 동적으로
+바꿔서 내리는거
+3. API : 과거엔 xml도 썼는데 json 데이터 구조 포맷으로 클라이언트로 전달
+
+view는 화면을 그리는 데 모든 역량을 집중
+컨트롤러 모델은 비즈니스로직
+요즘 MVC는 기본이다
+
+ResponseBody 사용 원리
+R.B가 없다면 스프링 컨테이너에서 얘를 viewResolver를 통해
+템플릿을 찾아가도록 하지만
+있다면 HTTP로 바로 넘겨야겠다고 결정함
+리졸버대신 HttpMessageConverter가 동작
+JsonConverter vs StringConverter (다양한게있음)
+그런데 문자가 아니라 객체일떄
+default가 객체를 JSON 형태로 만들어서 응답하겠다
+
+★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+
+멤버 컨트롤러가,
+멤버 서비스를 통해서 회원가입 하고,
+멤버 서비스를 통해서 데이터를 조회할수 있고,
+이러한 관계를 컨트롤러가 멤버 서비스를 의존한다고 말한다.
+
+스프링에선 컨테이너에 사용할 빈을 등록한다.
+컴포넌트 스캔과 자동 의존관계 설정
+
+컴포넌트 스캔
+@Controller
+@Service
+@Repository
+되게 정형화 된 패턴이다.
+그래서 스프링에서 다 등록되어있는 어노테이션임.
+
+자동 의존관계
+Autowried
+스프링 빈으로 등록되어있어야 동작함
+
+
+두번째 방법 (스프링 빈등록)
+자바 코드로 직접 스프링 빈 등록
+
+컴포넌트 등록할떈 
+@SpringBootApplication 클래스의
+main 실행 파일 하위 패키지만 대상이 된다.
+
+등록될 떄 스프링 빈은 기본적으로 싱글톤으로 등록됨
+
+의존 관계가 실행중에 동적으로 변하는 경우는
+거의 없으므로 생성자 주입을 권장한다. (아예 없다고 보면됨)
+
+실무에선 컴포넌트 스캔을 사용한다고 보면 된다
+
+정형화되지 않거나, 상황에 따라 구현 클래스를 변경해야 하면
+설정을 통해 스프링 빈으로 등록한다.
+
+현재 데이터 저장소가 선정되지 않아
+ 우선 인터페이스로 구현 클래스를 변경할 수 있도록 설계 했다
+이 방식 덕분에 나중에 MemoryMemberRepository를 다른 걸로 변경하면
+MemberService는 굳이 건드리지 않고도 인터페이스 덕에 
+구현클래스 변경만으로 모든 걸 해결할 수 있는 것이다.
+
+index.html이 바로 안나오고 home.html이 나오는 이유
+톰캣 서버는 웹 브라우저에서 url 요청을 받았을때
+첫 번째로 스프링 컨테이너 내부를 뒤져본다.
+이후로 없다면 static 패키지의 파일을 찾는다.
+
+shift delete 행삭제
+
+DB 생성중엔 sql 문 만들어서 기록을 정리해라
+
+스프링 프레임워크를 사용하여 JDBC를 다룰떈
+Datasource, DataUtils라는 게 사용됨.
+똑같이 컨테이너에서 관리함.
+SpringConfig에서 정의해둔 MemberRepository 반환에
+JDBC 생성자로만 바꿔주면 된다.
+
+객체 지향적 설계가 왜 좋다하는가
+다형성을 활용한다
+스프링은 이게 굉장히 편리하게 되도록 
+스프링 컨테이너가 이걸 지원해준다
+여기에 DI까지 더해져서
+
+아 원래라면 dao다루는 모든 곳을 가서 생성자를 바꿔줘야되는데
+SpringConfig 하나만 바꿔도 다 바꿔진 거다.
+OCP 원칙이 지켜졌다.
+
+Test는 가장 편하고 알아보기 쉽게 작성하면 된다.
+
+컨테이너가 개입안하면 단위테스트 개입하면 통합테스트
+가급적이면 단위테스트가 더 좋은 테스트임
+
+jpa는 인터페이스가
+구현 기술중에 하이버네이트가 있다.
+
+Controller의 Mapping 어노테이션은 해당 HTTP 메소드로 요청된
+데이터를 처리하고 페이지를 반환한다.
+이때 Model 객체에 속성값을 담아 전달할 수 있다.
+Controller가 문자열을 반환하면 viewResolver가 화면을 찾아
+처리한 뒤 렌더링한다. 스프링 부트 템플릿엔진은 기본적으로
+viewName 매핑. resources:templates/ + (viewName) + '.html'
+GetMapping("/")은 도메인으로 접속 시 페이지를 안내해준다.
+Mapping 경로는 thymeleaf 템플릿 엔진을 사용중이므로
+resources/templates/ 하위의 경로만 작성해주면 된다.
+
+
+api 응답 방식은 객체를 반환한다.
+@ResponseBody 는 응답 HTTP messagebody에 직접 넣는 것
+view 페이지가 따로 구성되지 않고 문자가 그대로 나간다.
+viewResolver를 거치지 않는다.
+
+스프링부트 controller에서 위와 같이 하고 객체를 반환한다면 
+Json 포맷으로 데이터가 전달된다.
+중첩 클래스에 빈을 정의해두고 사용할 수 있다.
+
+Controller, Service, Repository 등의 어노테이션은
+어플리케이션 실행 시 스프링 컨테이너에 싱글톤으로 등록되어 관리된다.
+
+@Autowired : injection
+= field, setter, constructor 3가지 방식이 있음.
+= setter는 public set이 노출되므로 권장하지 않음
+= 주입해야될 필드가 하나라면 생략할 수 있음.
+= Sping container에 등록된 빈이 주입되는 것.
+= ? @Controller 는 살려둔 채 SpringConfig에 정의한 빈은
+ 따로 어노테이션을 달지 않아도 된다 Autowired? Serivce?
+= 생성자 주입이 제일 선호되는 방식이다.
+
+Mapping 메소드의 인수로 Model을 준다.
+Model은 우리가 임의로 작성한 클래스가 될 수 있다.
+스프링에서 모두 처리해준다.
+Model 안엔 컬렉션도 넣을 수 있다.
+
+정의한 Model클래스엔 별도의 어노테이션을 달 필요가 없다.
+JPA가 다루는, 즉 테이블과 직접적으로 연관되는 Model(Resource)에는
+Entity 어노테이션을 클래스에 작성해준다.
+
+db에 자동으로 값을 넣어주는 걸 Identity라고 한다.
+Member엔 @Id, @GeneratedValue(strategy = GenerationType.IDENTITY)
+ 어노테이션이 id 필드에 작성되어 있다.
+JPA가 다루는 Entity 필드 식별자가 테이블 식별자와 다를 시 
+@Column 어노테이션을 이용한다
+ex) @Column(name = "username")
+
+기존 legacy 방식의 JDBC 메소드 작성을 줄이고 줄인게 
+JdbTemplate 방식이다.
+
+실무에서는 항상 동시성 문제에 신경쓴다.
+Map의 경우 concurrentHashMap을 사용하고
+id sequence를 기입해야할 떄도 volatile,  atomic 같은 걸 이용해야함.
+nullable하다면 Optional을 사용하자.
+가독성을 위해 컬렉션 가공은 stream 활용
+Map 도 enum처럼 values 메소드가 있다. value 컬렉션을 반환한다
+Optional을 반환하는 건 별로 예쁘지 않다. 바로 get 해주자.
+Optional로 꺼내기만 하면 의미 없다. ifPresent를 활용하자. (예외 던지기)
+?Optional에서 바로 꺼내는 방식도 좋지 않다는데 그럼 어떡하라구
+
+Service 클래스는 비즈니스에 가까운 용어를 사용한다.
+test는 식별자를 한글로 적어도 상관없다. 최대한 간단하게 알아보게 적자.
+Spring은 톰캣 서버를 내장했다.
+? 외부에서 인스턴스를 넣어주는 걸 DI 라고 한다(의존성 주입)
+
+JPA
+build.gradle에 ~.data-jpa를 추가해주면 스프링부트가 EntityManger를
+자동으로 연결 시킴. 단 건의 저장 조회 업데이트는 쿼리문이 필요 없음.
+PK 기반이 아닌 것들은 쿼리를 작성.
+JPA를 감싼 Spring data JPA를 사용하면 jpql 또한 작성할 필요 없음.
+
+JPA의 쿼리 메소드
+createQuery("select m from Member m", Member.class)
+Member 객체 자체를 기입한다. Member as m 의 간략화
+
+Spring data JPA
+JpaRepository를 상속한 인터페이스는 Spring bean으로 등록된다.
+proxy란 기술로 객체를 생성해서 스프링 빈을 올려서 그걸 인젝션에서 썼다.
+근데 save 메소드 등을 정의 안했는데 왜 동작될까?
+JpaRepository와 연관된 클래스의 signature 와 MemberRepository의
+signature를 맞춰놨었기 때문이다. (기본 CRUD는 간단히 적용할 수 있다는거)
+통용되는 것 이외에 하고 싶다면
+인터페이스 이름 만으로 개발할 수 있다.
+findByName 처럼 규약을 지키면 된다. (알아봐야함)
+복잡한 동적 쿼리는 Querydsl이라는 라이브러리를 사용하면 된다.
+실무에선 JPA, SDJPA, Querydsl 을 조합해서 쓴다고 보면 된다.
+JPA가 제공하는 네이티브 쿼리를 사용하거나
+JdbcTemplate을 이용하거나 Mybatis까지 섞어서 사용해도 된다.
+
+
+SpringConfig의 memberRepository에 주입해야함.
+어떤 원리로 인터페이스만으로 동작하는 지는 나중에 공부
+아래 MemberService에 의존 관계를 바로 세팅해줘야함.
+
+
+
+SpringBoot는 Welcome Page로 static 패키지의 index.html을 찾는다.
+템플릿 엔진을 사용할 땐 html 태그에 인라인으로 선언해줘야한다.
+thymeleaf 는 th:each와 같은 형식으로 인라인태그에 작성할 수 있고
+each의 경우 루프를 실행한다.
+```
+<tr th:each="member : ${members}">
+                <td th:text="${member.id}"></td>
+                <td th:text="${member.name}"></td>
+            </tr> ```
+자바 빈의 모든 필드는 private 하므로 getter로 접근된다.
+${key} < key가 들어가며 html엔 value가 반환된다.
+th:text만 그런진 몰라도 인라인태그로 th를 다루면 
+작성되었던 innerText이 value로 교체된다.
+
+TEST
+test class 작성 시 기존 클래스명에 Test를 붙여 만들자.
+다른데서 갖다 쓸 게 아니기 때문에 public class 선언 안 해도됨
+test 할 클래스의 객체를 필드에 선언한 Composition 형태로 구성
+여러 단위로 Class Test를 한다면 test 메소드의 순서는 보장되지 않음.
+순서랑 상관없이 동작하도록 설계하는 게 중요하다.
+DB와 접근할 땐 Transaction을 막으면 된다.
+요즘은 아예 테스트 케이스를 먼저 작성한 뒤 구현 클래스를 작성할 때도 있다.
+위 방법을 개발 순서가 역전된 테스트 주도 개발(TDD) 라고 한다.
+@AfterEach : 하나의 Test가 끝날 때마다 호출됨
+test는 편한게 최고다. import static 사용하자.
+Assertions 클래스에 대한 이해 필요
+```assertThorws(예상 exception, 호출 로직);```
+import static은 메소드를 클릭하고 alt + enter
+given / when / then을 나눠 작성한다.
+어떤 데이터를 / 어떤 메소드를 / 검증부
+test에선 정상 flow 도 중요하지만 예외 flow가 훨씬 더 중요하다.
+
+AOP : Aspect Oriented Programming
+모든 메소드의 호출 시간을 측정하고 싶다면? -> 최악
+초기엔 시행시간이 많이 걸린다. 클래스 데이터 읽고 그런 작업이 있음.
+실무에선 그래서 warm up을 함
+공통 관심 사항(cross-cuttin concern) vs 핵심 관심 사항(core concern)
+시간 측정 로직을 한 군데 모으고 내가 원하는데 적용하고 싶다.
+이걸 가능하게 하는 기술이 AOP다
+``` @Around("execution(* hello.hellospring..*(..))") ```
+``` @Around("execution(* hello.hellospring.service..*(..))") ```
+메소드 호출마다 intercept 가 딱 딱 걸린다.
+활용과 응용도가 상당한 기술이다.
+
+AOP 적용 후 의존 관계는
+스프링 컨테이너 내부에서
+가짜 의존 구체(빈)를 만든다(Proxy)
+이 가짜 구체를 우선 호출되도록 하고 실제 구체를 호출한다.
+실제로 AOP 적용 후 Controller 에서 의존 구체에 getClass를 호출하면
+EnhancerBySpringCGLIB가 주소에 나타난다.
+스프링은 프록시방식의 AOP
+
+다른 건 컴파일 타임에 자바 코드를 진짜 박아주는 것도 있다.
+
+
+
+
+
+
+
+
+
+
+
+
+
+★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+shortcut
+
+ctrl + P : 파라미터 정보
+ctrl + backspace : 단어 지우기
+ctrl + x : 행 cut
+ctrl + N : navigate
+ctrl + alt + N : 지역 변수가 return 값에 기입될 때 간략화.
+ctrl + alt + V : 반환 값을 좌변에 추츨
+ctrl + alt + M : 선택한 문장 메소드로 추출
+ctrl + shift + T : test 생성
+ctrl + alt + I : 자동 들여쓰기 (코드 정렬)
+ctrl + alt + enter : 윗 줄 엔터치면서 넘어가기
+
+shift + enter : 아랫 줄 엔터치면서 넘어가기
+shift + delete : 행 삭제
+shift + F6 : 동일 단어 교체
+shift + F10 : 이전 run 재실행
+
+alt + insert : generate
+alt + enter : 자동 완성 등
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
